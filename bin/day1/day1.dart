@@ -30,7 +30,7 @@ int numOfDepthMeasureIncreases(List<int> measurements) {
 }
 
 Future<List<int>> getMeasurements() async {
-  var file = File('./bin/day1/input');
+  var file = File('day1/input');
   var lines = await file.readAsLines();
 
   List<int> numbers = [];
@@ -40,7 +40,7 @@ Future<List<int>> getMeasurements() async {
   return numbers;
 }
 
-void day1() async {
+void main() async {
   var measurements = await getMeasurements();
   var r = numOfMeasureWindowIncreases(measurements);
 

@@ -140,13 +140,13 @@ String findUnCommon(List<String> report) {
 }
 
 Future<List<String>> getDiagnosticReport() async {
-  var file = File('./bin/day3/input');
+  var file = File('day3/input');
   var lines = await file.readAsLines();
 
   return lines;
 }
 
-void day3() async {
+void main() async {
   var report = await getDiagnosticReport();
   // var gamma = findCommon(report);
   // var epsilon = findUnCommon(report);

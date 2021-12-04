@@ -65,7 +65,7 @@ bool won(List<List<int>> board) {
 }
 
 Future<Bingo> getBingoData() async {
-  var lines = await File('./bin/day4/input').readAsLines();
+  var lines = await File('day4/input').readAsLines();
   var bingo = Bingo();
   bingo.numbers = lines[0].split(',').map<int>((e) => int.parse(e)).toList();
 
@@ -86,7 +86,7 @@ Future<Bingo> getBingoData() async {
   return bingo;
 }
 
-void day4() async {
+void main() async {
   var bingo = await getBingoData();
   var score = getScoreOfLastWinningBoard(bingo);
   print(score);

@@ -1,10 +1,10 @@
 import 'dart:io';
 
 List<String> getInput() {
-  return File('./bin/day5/input').readAsLinesSync();
+  return File('day5/input').readAsLinesSync();
 }
 
-void day5() {
+void main() {
   var list = getInput();
 
   print(list);
