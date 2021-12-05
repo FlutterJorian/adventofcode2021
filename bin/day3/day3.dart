@@ -139,20 +139,20 @@ String findUnCommon(List<String> report) {
   return result;
 }
 
-Future<List<String>> getDiagnosticReport() async {
-  var file = File('day3/input');
-  var lines = await file.readAsLines();
+List<String> getDiagnosticReport() {
+  var file = File('day3/input.txt');
+  var lines = file.readAsLinesSync();
 
   return lines;
 }
 
-void main() async {
-  var report = await getDiagnosticReport();
+void main() {
+  var report = getDiagnosticReport();
   // var gamma = findCommon(report);
   // var epsilon = findUnCommon(report);
 //  var r = int.parse(gamma, radix: 2) * int.parse(epsilon, radix: 2);
   var oxy = findCommonV2(report);
-  report = await getDiagnosticReport();
+  report = getDiagnosticReport();
   var scrub = findUnCommonV2(report);
   var r = int.parse(oxy, radix: 2) * int.parse(scrub, radix: 2);
 //4790390

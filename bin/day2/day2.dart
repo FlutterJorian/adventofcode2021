@@ -44,9 +44,9 @@ int getFinalPositionsV2(List<SubmarineCommand> commands) {
   return depth * horizontal;
 }
 
-Future<List<SubmarineCommand>> getSubmarineCommands() async {
-  var file = File('day2/input');
-  var lines = await file.readAsLines();
+List<SubmarineCommand> getSubmarineCommands() {
+  var file = File('day2/input.txt');
+  var lines = file.readAsLinesSync();
 
   List<SubmarineCommand> commands = [];
   for (var line in lines) {
@@ -62,7 +62,7 @@ class SubmarineCommand {
   int value;
 }
 
-void main() async {
-  var commands = await getSubmarineCommands();
+void main() {
+  var commands = getSubmarineCommands();
   print(getFinalPositionsV2(commands));
 }
