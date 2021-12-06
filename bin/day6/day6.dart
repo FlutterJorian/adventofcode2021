@@ -17,32 +17,29 @@ int getTotalOfFishAfterDays(List<int> fish, int days) {
 }
 
 int getTotalOfFishAfterDaysV2(List<int> fish, int days) {
-  Map<int, int> fishMap = {};
+  List<int> fishCount = List.filled(9, 0);
   for (var f in fish) {
-    if (fishMap.containsKey(f)) {
-      fishMap[f] = fishMap[f]! + 1;
+    if (fishCount[f] > 0) {
+      fishCount[f] = fishCount[f] + 1;
     } else {
-      fishMap[f] = 1;
+      fishCount[f] = 1;
     }
   }
   for (int day = 1; day <= days; day++) {
-    Map<int, int> newFishMap = {};
-    for (int i = 0; i <= 8; i++) {
-      newFishMap[i] = fishMap[i] ?? 0;
-    }
-    for (int i = 0; i <= 8; i++) {
+    List<int> newFishCount = List.from(fishCount);
+    for (int i = 0; i < fishCount.length; i++) {
       if (i == 6) {
-        fishMap[i] = newFishMap[0]! + newFishMap[7]!;
+        fishCount[i] = newFishCount[0] + newFishCount[7];
       } else if (i < 8) {
-        fishMap[i] = newFishMap[i + 1]!;
+        fishCount[i] = newFishCount[i + 1];
       } else {
-        fishMap[i] = newFishMap[0]!;
+        fishCount[i] = newFishCount[0];
       }
     }
   }
   int total = 0;
-  for (var f in fishMap.entries) {
-    total += f.value;
+  for (var f in fishCount) {
+    total += f;
   }
   return total;
 }
@@ -55,5 +52,6 @@ List<int> getFish() {
 void main() {
   var fish = getFish();
   var total = getTotalOfFishAfterDaysV2(fish, 256);
+
   print(total);
 }
