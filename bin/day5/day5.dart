@@ -65,46 +65,27 @@ class Line {
 
   List<Point> getPoints() {
     List<Point> points = [];
-    if (from.x == to.x) {
-      if (from.y > to.y) {
-        for (num y = from.y; y > to.y; y--) {
-          points.add(Point(from.x, y));
-        }
-      } else {
-        for (num y = from.y; y < to.y; y++) {
-          points.add(Point(from.x, y));
-        }
+
+    num diffx = from.x - to.x;
+    num diffy = from.y - to.y;
+
+    num x = from.x;
+    num y = from.y;
+
+    points.add(Point(x, y));
+    for (int i = 0; i < max(diffx.abs(), diffy.abs()); i++) {
+      if (diffx < 0) {
+        x++;
+      } else if (diffx > 0) {
+        x--;
       }
-    } else if (from.y == to.y) {
-      if (from.x > to.x) {
-        for (num x = from.x; x > to.x; x--) {
-          points.add(Point(x, from.y));
-        }
-      } else {
-        for (num x = from.x; x < to.x; x++) {
-          points.add(Point(x, from.y));
-        }
+      if (diffy < 0) {
+        y++;
+      } else if (diffy > 0) {
+        y--;
       }
-    } else {
-      if (from.x > to.x && from.y > to.y) {
-        for (num x = from.x, y = from.y; x > to.x && y > to.y; x--, y--) {
-          points.add(Point(x, y));
-        }
-      } else if (from.x < to.x && from.y < to.y) {
-        for (num x = from.x, y = from.y; x < to.x && y < to.y; x++, y++) {
-          points.add(Point(x, y));
-        }
-      } else if (from.x > to.x && from.y < to.y) {
-        for (num x = from.x, y = from.y; x > to.x && y < to.y; x--, y++) {
-          points.add(Point(x, y));
-        }
-      } else if (from.x < to.x && from.y > to.y) {
-        for (num x = from.x, y = from.y; x < to.x && y > to.y; x++, y--) {
-          points.add(Point(x, y));
-        }
-      }
+      points.add(Point(x, y));
     }
-    points.add(to);
     return points;
   }
 }
