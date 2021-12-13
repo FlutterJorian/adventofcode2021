@@ -1,68 +1,82 @@
 import 'dart:io';
 
-Map<dynamic, dynamic> buildTreeStart(List<List<String>> lines) {
-  var tree = {};
-
-  tree['start'] = {};
+Map<String, List> getInput() {
+  Map<String, List> map = {};
+  var lines = File('day12/input.txt').readAsLinesSync();
   for (var line in lines) {
-    if (line.contains('start')) {
-      var cave = line.singleWhere((e) => e != 'start');
-      tree['start'][cave] = {};
-      var subTree = tree['start'];
-      buildTree(lines, subTree, cave, 'start', tree);
+    var parts = line.split('-');
+    if (map[parts[0]] != null) {
+      map[parts[0]]!.add(parts[1]);
+    } else {
+      map[parts[0]] = [parts[1]];
+    }
+    if (map[parts[1]] != null) {
+      map[parts[1]]!.add(parts[0]);
+    } else {
+      map[parts[1]] = [parts[0]];
     }
   }
-  return tree;
+  return map;
 }
 
-void buildTree(List<List<String>> lines, Map<dynamic, dynamic> tree,
-    String caveName, String prevCave, Map<dynamic, dynamic> full) {
-  if (caveName == 'end') return;
-  for (var line in lines) {
-    if (line.contains(caveName) && !line.contains(prevCave)) {
-      var cave = line.singleWhere((e) => e != caveName);
-      if (!mapContainsKey(full, cave)) {
-        tree[caveName][cave] = {};
-        var subTree = tree[caveName];
-        buildTree(lines, subTree, cave, caveName, full);
+int totalPaths(Map<String, List> map) {
+  List<String> paths = [];
+  exploreV2(map, 'start', paths, '', false);
+  for (var path in paths) {
+    print(path.substring(0, path.length - 1));
+  }
+  return paths.length;
+}
+
+List<String> explore(
+    Map<String, List> map, String node, List<String> paths, String path) {
+  path += '$node,';
+  if (node == 'end') {
+    paths.add(path);
+    return paths;
+  }
+  for (String cave in map[node]!) {
+    if (RegExp('[a-z]+').hasMatch(cave) && path.contains(cave)) {
+      continue;
+    }
+    explore(map, cave, paths, path);
+  }
+  return paths;
+}
+
+List<String> exploreV2(Map<String, List> map, String node, List<String> paths,
+    String path, bool visitedTwice) {
+  path += '$node,';
+  if (node == 'end') {
+    visitedTwice = false;
+    paths.add(path);
+    return paths;
+  }
+  for (String cave in map[node]!) {
+    if (RegExp('[a-z]+').hasMatch(cave) && path.contains(cave)) {
+      if (_smallCaveVisitedTwice(path) || cave == 'start') {
+        continue;
       }
     }
+    exploreV2(map, cave, paths, path, visitedTwice);
   }
+  return paths;
 }
 
-bool mapContainsKey(Map<dynamic, dynamic> tree, String key) {
-  if (tree.containsKey(key) &&
-      (RegExp('[a-z]').hasMatch(key) && key != 'end')) {
-    return true;
-  } else {
-    for (var entry in tree.entries) {
-      if (mapContainsKey(entry.value, key)) {
-        return true;
-      }
+bool _smallCaveVisitedTwice(String path) {
+  List<String> smallCaves = [];
+  for (var cave in path.split(',')) {
+    if (RegExp('[a-z]+').hasMatch(cave)) {
+      if (smallCaves.contains(cave)) return true;
+      smallCaves.add(cave);
     }
   }
   return false;
 }
 
-List<List<String>> getInput() {
-  var lines = File('day12/test.txt').readAsLinesSync();
-  return lines.map((e) => e.split('-').toList()).toList();
-}
-
-void countTree(Map<dynamic, dynamic> tree, List<int> count) {
-  if (tree.entries.isNotEmpty) {
-    for (var branch in tree.entries) {
-      countTree(branch.value, count);
-    }
-  }
-  count[0]++;
-}
-
 void main() {
-  var lines = getInput();
-  var tree = buildTreeStart(lines);
+  var map = getInput();
+  var result = totalPaths(map);
 
-  List<int> i = [0];
-  countTree(tree, i);
-  print(i);
+  print(result); //155477
 }
